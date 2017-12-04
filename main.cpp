@@ -1,17 +1,47 @@
-#include "prac.h"
+
+#include <iostream>//includes iostream for cout and cin
+#include <string.h> //includes string functions
+#include <cmath> //includes math functions
+#include <fstream> //includes file reading functions
+#include <iomanip> //includes manip functions
+#include <string>
+#include <time.h>
 
 using namespace std;
+void videoExtractor();
+void customerExtractor();
+void displayMenu();
+
+struct video {
+    string title;
+    string stars;
+    string producer;
+    string director;
+    string company;
+    int copies;
+public:
+};
+
+struct customer {
+    string firstName;
+    string lastName;
+    string accountNumber;
+    video rental[5];
+public:
+    void printInfo();
+};
 
 
 customer customers[100];
 video videos[1000];
 int i = 0;
+int j = 0;
 int main() { //starts the main function
 
     customerExtractor();
     videoExtractor();
-    //displayMenu();
-    cout << customers[1].firstName << endl;
+    displayMenu();
+    cout << videos[0].stars << endl;
 
 
     return(0);
@@ -20,33 +50,62 @@ int main() { //starts the main function
 void customerExtractor() {
     string line;
     ifstream infile;
-    infile.open("/home/kahlil/CLionProjects/untitled/customers.txt");
+    infile.open("/home/kahlil/CLionProjects/untitled1/customers.txt");
     do{
         infile >> customers[i].firstName;
         infile >> customers[i].lastName;
         infile >> customers[i].accountNumber;
-        infile >> customers[i].videos[0].title;
-        infile >> customers[i].videos[1].title;
-        infile >> customers[i].videos[2].title;
-        infile >> customers[i].videos[3].title;
-        infile >> customers[i].videos[4].title;
+        infile >> customers[i].rental[0].title;
+        infile >> customers[i].rental[1].title;
+        infile >> customers[i].rental[2].title;
+        infile >> customers[i].rental[3].title;
+        infile >> customers[i].rental[4].title;
         i++;
     } while (infile.good());
 }
 void videoExtractor() {
     string line;
     ifstream infile;
-    infile.open("/home/kahlil/CLionProjects/untitled/videos.txt");
+    infile.open("/home/kahlil/CLionProjects/untitled1/videos.txt");
     do{
-        infile >> videos[i].title;
-        infile >> videos[i].stars;
-        infile >> videos[i].producer;
-        infile >> videos[i].director;
-        infile >> videos[i].company;
-        infile >> videos[i].copies;
-        i++;
+        infile >> videos[j].title;
+        infile >> videos[j].stars;
+        infile >> videos[j].producer;
+        infile >> videos[j].director;
+        infile >> videos[j].company;
+        infile >> videos[j].copies;
+        j++;
     } while (infile.good());
 }
+/*
+void customer::printInfo(){
+    cout << "First Name:" <<firstName << endl;
+    cout << "Last Name:" << lastName << end;
+    cout << "Acc. Number" << accountNumber << endl;
+    cout << "Rentals:" << endl;
+    cout << rental[0] << endl;
+    cout << rental[1] << endl;
+    cout << rental[2] << endl;
+    cout << rental[3] << endl;
+    cout << rental[5] << endl;
+}*/
+
+void printVideoList(){
+    cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
+    cout << "VIDEOS ON FILE" << endl;
+    cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
+    int r=0;
+    while(r <= 100){
+        if(videos[r].title==""){
+            break;
+        }
+    cout << videos[r].title << " --- Copies: " << videos[r].copies << endl;
+        r++;
+
+}cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
+    cout << "" << endl;
+    cout << "" << endl;}
+
 
 void displayMenu(){
     int selection;
@@ -78,7 +137,7 @@ void displayMenu(){
 
         }
         if(selection==5){
-
+            printVideoList();
         }
         if(selection==6){
 
