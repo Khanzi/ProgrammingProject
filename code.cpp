@@ -1,6 +1,7 @@
 //
-// Created by Kahlil Wehmeyer on 11/21/17.
+// Created by kahlil on 12/3/17.
 //
+
 #include <iostream>//includes iostream for cout and cin
 #include <string.h> //includes string functions
 #include <cmath> //includes math functions
@@ -11,28 +12,94 @@
 #include "prac.h"
 using namespace std;
 
-void videos::videoList() {
-    ofstream list;
-    string videoname, con;
-    list.open("/Videos/List.txt");
-    while(getline(list, videoname)){
-            cout << videoname << endl;
+void customerExtractor() {
+        string line;
+        int counter=0;
+        ifstream file;
+        file.open("/home/kahlil/CLionProjects/untitled/customers.txt");
+        while(getline(file, line)){
+            customer(counter);
+            counter.firstName = line;
+
+        }
+}
+void videoExtractor() {
+    string line;
+    ifstream file;
+    int numberOfLines;
+    file.open("/home/kahlil/CLionProjects/untitled/customers.txt");
+    while(getline(file, line)){
+
     }
-    cout << "This is the current list of videos, would you like to add more videos?" << endl;
+
+}
+
+void displayMenu(){
+    int selection;
+    do {
+        cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
+        cout << "Video Store Interface:" << endl;
+        cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
+        cout << "[1] Add a new customer" << endl;
+        cout << "[2] Add a new video" << endl;
+        cout << "[3] Rent a video" << endl;
+        cout << "[4] Return a video" << endl;
+        cout << "[5] List videos in the store" << endl;
+        cout << "[6] Show video details" << endl;
+        cout << "[7] List of videos rented by each customer" << endl;
+        cout << "[0] Save & Exit" << endl;
+        cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
+        cin >> selection;
+
+        if(selection==1){
+
+        }
+        if(selection==2){
+
+        }
+        if(selection==3){
+
+        }
+        if(selection==4){
+
+        }
+        if(selection==5){
+
+        }
+        if(selection==6){
+
+        }
+        if(selection==7){
+
+        }
+    } while(selection != 0);
+}
+
+
+/*
+void videos::videoList() {
+    ifstream list;
+    string videoname, con;
+    list.open("/home/kahlil/CLionProjects/untitled/Videos/List.txt");
+    while(getline(list, videoname)){
+        cout << videoname << endl;
+    }
+    cout << "This is the current list of videos, would you like to add more videos?(Y/N)" << endl;
     cin >> con;
     if (con == "Yes" | con == "yes" | con == "y" | con == "y"){
         addVideo();
 
-}}
+    }}
+
 void videos::addVideo(){
     string moviename, stars, producer, director, company;
     int copies;
 
     cout << "Enter movie title" << endl;
-    cin >> moviename;
+    getline(cin, moviename);
 
     ofstream movie, list;
-    movie.open("/Videos/" + moviename + ".txt");
+    movie.open("/home/kahlil/CLionProjects/untitled/Videos/" + moviename + ".txt");
 
     cout << "Enter Stars(Format: Name One, Name Two, Name Three, Name Four.):" << endl;
     getline(cin, stars);
@@ -55,9 +122,9 @@ void videos::addVideo(){
     movie << director << endl;
     movie << producer << endl;
     movie << company << endl;
-    cout << movie.uppercase << " has been added." << endl;
+    cout << "Movie been added." << endl;
 
-    list.open("/Videos/List.txt");
+    list.open("/home/kahlil/CLionProjects/untitled/Videos/List.txt");
     list << moviename << endl;
 
 
@@ -70,7 +137,7 @@ void customer::newCustomer(){ //Adds a new customer
     cout << "Please enter the customers first and last name" << endl;
     getline(cin, customerName);
     ofstream file;
-    file.open("Customers/"+ customerName + ".txt");
+    file.open("/home/kahlil/CLionProjects/untitled/Customers/"+ customerName + ".txt");
 
     cout << "Date of Birth(DDMMYYYY):" << endl;
     cin >> dateOfBirth;
@@ -90,27 +157,28 @@ void customer::newCustomer(){ //Adds a new customer
     file << "Customer Since:" << __DATE__ << endl;
     file.close();
     ofstream listFile;
-    listFile.open("Customers/listofcustomers.txt");
+    listFile.open("/home/kahlil/CLionProjects/untitled/Customers/listofcustomers.txt");
     listFile << customerName << endl;
 
 }
- //This prints the customer name and ID
+
+//This prints the customer name and ID
 void customer::printCustomerInfo(){
     string customerName;
     cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~CUSTOMER LOOKUP~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
     cout << "Please enter the customer name:" << endl;
-    cin >> customerName;
+    getline(cin, customerName);
     cout << "Searching... " << endl;
 
     string namePending;
-    ofstream listFile;
-    listFile.open("Customers/listofcustomers.txt");
+    ifstream listFile;
+    listFile.open("/home/kahlil/CLionProjects/untitled/Customers/listofcustomers.txt");
     while(getline(listFile, namePending)){
         if(namePending==customerName){
             string customerID;
             cout << customerName << endl;
-            ofstream customerFile;
-            customerFile.open("Customers/" + customerName + ".txt");
+            ifstream customerFile;
+            customerFile.open("/home/kahlil/CLionProjects/untitled/Customers/" + customerName + ".txt");
             getline(customerFile, customerID);
             cout << "Account ID: " << customerID << endl;
             customerFile.close();
@@ -121,4 +189,4 @@ void customer::printCustomerInfo(){
     }
     cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~DONE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
 
-}
+}*/

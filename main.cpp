@@ -1,4 +1,3 @@
-
 #include "prac.h"
 
 using namespace std;
@@ -6,13 +5,12 @@ using namespace std;
 
 
 int main() { //starts the main function
-    customer(a);
-   // a.newCustomer();
-    videos(b);
-    b.videoList();
+
+    customerExtractor();
+    videoExtractor();
+    displayMenu();
+
 
 
     return(0);
 }
-
-
