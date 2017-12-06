@@ -13,6 +13,7 @@ void customerExtractor();
 void displayMenu();
 void addAVideo();
 void addACustomer();
+void showVideoDetails();
 
 struct video {
     string title;
@@ -28,7 +29,7 @@ struct customer {
     string firstName;
     string lastName;
     string accountNumber;
-    video rental[5];
+    string rental[5];
 public:
     void printInfo();
 };
@@ -49,23 +50,22 @@ int main() { //starts the main function
 }
 
 void customerExtractor() {
-    string line;
     ifstream infile;
     infile.open("/home/kahlil/CLionProjects/untitled1/customers.txt");
     do{
         getline(cin, customers[i].firstName);
         getline(cin, customers[i].lastName);
         infile >> customers[i].accountNumber;
-        getline(cin, customers[i].rental[0].title);
-        getline(cin, customers[i].rental[1].title);
-        getline(cin, customers[i].rental[2].title);
-        getline(cin, customers[i].rental[3].title);
-        getline(cin, customers[i].rental[4].title);
+        getline(cin, customers[i].rental[0]);
+        getline(cin, customers[i].rental[1]);
+        getline(cin, customers[i].rental[2]);
+        getline(cin, customers[i].rental[3]);
+        getline(cin, customers[i].rental[4]);
         i++;
     } while (infile.good());
+    infile.close();
 }
 void videoExtractor() {
-    string line;
     ifstream infile;
     infile.open("/home/kahlil/CLionProjects/untitled1/videos.txt");
     do{
@@ -77,7 +77,9 @@ void videoExtractor() {
         infile >> videos[j].copies;
         j++;
     } while (infile.good());
+    infile.close();
 }
+
 void printVideoList(){
     cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
     cout << "VIDEOS ON FILE" << endl;
@@ -93,7 +95,7 @@ void printVideoList(){
 }cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
     cout << "" << endl;
     cout << "" << endl;}
-/*void addACustomer() {
+void addACustomer() {
     int openPos;
     for(int q = 0; q <= 100; q++){
         if(customers[q].firstName==""){
@@ -112,9 +114,7 @@ void printVideoList(){
         }
     }
     cout << customers[openPos].firstName << " has been added." << endl;
-}*/
-
-
+}
 void addAVideo() {
     int openPos;
     for(int q = 0; q < 1000; q++){
@@ -137,10 +137,26 @@ void addAVideo() {
     }
     cout << videos[openPos].title << " has been added" << endl;
 }
-
+void showVideoDetails() {
+    string query;
+    cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
+    cout << "Enter Title To Display Details" << endl;
+    getline(cin, query);
+    for(int q; q <= 1000; q++){
+        if(videos[q].title==query){
+            cout << "Title: " << videos[q].title << endl;
+            cout << "Stars: " << videos[q].stars << endl;
+            cout << "Director: " << videos[q].director << endl;
+            cout << "Producer: " << videos[q].producer << endl;
+            cout << "Production Company: " << videos[q].company << endl;
+            cout << "Copies: " << endl;
+            cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
+        }
+    }
+}
 
 void displayMenu(){
-    int selection;
+    string selection;
     do {
         cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
         cout << "Video Store Interface:" << endl;
@@ -154,28 +170,29 @@ void displayMenu(){
         cout << "[7] List of videos rented by each customer" << endl;
         cout << "[0] Save & Exit" << endl;
         cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
-        cin >> selection;
+        getline(cin, selection);
 
-        if(selection==1){
-            void addACustomer();
+        if(selection=="1"){
+            addACustomer();
         }
-        if(selection==2){
-            void addAVideo();
+        if(selection=="2"){
+            addAVideo();
         }
-        if(selection==3){
-
-        }
-        if(selection==4){
+        if(selection=="3"){
 
         }
-        if(selection==5){
+        if(selection=="4"){
+
+        }
+        if(selection=="5"){
             printVideoList();
         }
-        if(selection==6){
+        if(selection=="6"){
+            showVideoDetails();
 
         }
-        if(selection==7){
+        if(selection=="7"){
 
         }
-    } while(selection != 0);
+    } while(selection != "0");
 }
