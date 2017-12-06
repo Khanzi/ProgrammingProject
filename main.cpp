@@ -18,6 +18,7 @@ void returnAVideo();
 void videosByCustomer();
 void customerSave();
 void videoSave();
+void errorMsg(string);
 
 struct video {
     string title;
@@ -28,7 +29,6 @@ struct video {
     int copies;
 public:
 };
-
 struct customer {
     string firstName;
     string lastName;
@@ -84,7 +84,6 @@ void videoExtractor() {
     } while (infile.good());
     infile.close();
 }
-
 void printVideoList(){
     cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
     cout << "VIDEOS ON FILE" << endl;
@@ -140,6 +139,7 @@ void addAVideo() {
 }
 void showVideoDetails() {
     string query;
+    bool foundit = false;
     cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
     cout << "Enter Title To Display Details" << endl;
     getline(cin, query);
@@ -152,12 +152,20 @@ void showVideoDetails() {
             cout << "Production Company: " << videos[q].company << endl;
             cout << "Copies: " << videos[q].copies << endl;
             cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
+            foundit = true;
         }
+    }
+    if(!foundit){
+        errorMsg("Video not in database");
+        return;
     }
 }
 void rentAVideo() {
     string first, last, title;
     int custNum, vidNum;
+    bool foundCust = false;
+    bool foundVid = false;
+
     cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
     cout << "RENT A VIDEO" << endl;
     cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
@@ -171,23 +179,32 @@ void rentAVideo() {
     for(int i=0; i <= 100; i++){
         if(customers[i].firstName==first & customers[i].lastName==last){
             custNum = i;
+            foundCust = true;
             break;
         }
+    }
+    if(!foundCust){
+        errorMsg("Customer not found in database");
+        return;
     }
     for(int i=0; i <= 1000; i++){
         if(videos[i].title==title){
             vidNum = i;
+            foundVid = true;
             break;
         }
     }
+    if(!foundVid){
+        errorMsg("Video not in database");
+    }
 
     if(videos[vidNum].copies<1){ //this should take me back to the menu
-        cout << "!!! OUT OF COPIES !!!" << endl;
+        errorMsg("!!! OUT OF COPIES !!!");
         return;
     }
 
     if(customers[custNum].rental!="-"){ //this should take me back to the menu
-        cout << "!!! CUSTOMER HAS NOT RETURNED PREVIOUS RENTAL !!!" << endl;
+        errorMsg("!!! CUSTOMER HAS NOT RETURNED PREVIOUS RENTAL !!!");
         return;
     }
 
@@ -200,6 +217,8 @@ void rentAVideo() {
 void returnAVideo() {
     string first, last, title;
     int custNum, vidNum;
+    bool foundCust = false;
+    bool foundVid = false;
     cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
     cout << "RETURN A VIDEO" << endl;
     cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
@@ -213,18 +232,27 @@ void returnAVideo() {
     for(int i=0; i <= 100; i++){
         if(customers[i].firstName==first & customers[i].lastName==last){
             custNum = i;
+            foundCust = true;
             break;
         }
+    }
+    if(!foundCust){
+        errorMsg("No records of this customer - possible entry error");
+        return;
     }
     for(int i=0; i <= 1000; i++){
         if(videos[i].title==title){
             vidNum = i;
+            foundVid = true;
             break;
         }
     }
-
+    if(!foundVid){
+        errorMsg("Video no in database - possible entry error");
+        return;
+    }
     if(customers[custNum].rental!=title){
-        cout << "ERROR: Customer has not rented out this film: " << title <<  endl;
+        errorMsg("ERROR: Customer has not rented out this film: " + title);
     }
 
     customers[custNum].rental="-";
@@ -234,7 +262,7 @@ void returnAVideo() {
 }
 void videosByCustomer() {
         for(int i=0; i < 100; i++){
-            if(customers[i].rental != "-") {
+            if(customers[i].rental != "-" | customers[i].rental!="") {
                 cout << customers[i].firstName << " " << customers[i].lastName << " : " << customers[i].rental << endl;
             }
 
@@ -307,4 +335,9 @@ void videoSave() {
         outfile << videos[i].copies << endl;
     }
     outfile.close();
+}
+void errorMsg(string message) {
+    cout << "" << endl;
+    cout << "!!! ERROR: " << message << " !!!" << endl;
+    cout << "" << endl;
 }
