@@ -14,6 +14,10 @@ void displayMenu();
 void addAVideo();
 void addACustomer();
 void showVideoDetails();
+void returnAVideo();
+void videosByCustomer();
+void customerSave();
+void videoSave();
 
 struct video {
     string title;
@@ -29,7 +33,7 @@ struct customer {
     string firstName;
     string lastName;
     string accountNumber;
-    string rental[5];
+    string rental;
 public:
     void printInfo();
 };
@@ -40,41 +44,42 @@ video videos[1000];
 int i = 0;
 int j = 0;
 int main() { //starts the main function
-
-    //customerExtractor();
-    //videoExtractor();
+    customerExtractor();
+    videoExtractor();
     displayMenu();
-
+    customerSave();
+    videoSave();
 
     return(0);
 }
 
 void customerExtractor() {
+    i = 0;
     ifstream infile;
     infile.open("/home/kahlil/CLionProjects/untitled1/customers.txt");
     do{
-        getline(cin, customers[i].firstName);
-        getline(cin, customers[i].lastName);
-        infile >> customers[i].accountNumber;
-        getline(cin, customers[i].rental[0]);
-        getline(cin, customers[i].rental[1]);
-        getline(cin, customers[i].rental[2]);
-        getline(cin, customers[i].rental[3]);
-        getline(cin, customers[i].rental[4]);
+        getline(infile, customers[i].firstName);
+        getline(infile, customers[i].lastName);
+        getline(infile, customers[i].accountNumber);
+        getline(infile, customers[i].rental);
         i++;
     } while (infile.good());
     infile.close();
 }
 void videoExtractor() {
+    j = 0;
+    string temp;
     ifstream infile;
     infile.open("/home/kahlil/CLionProjects/untitled1/videos.txt");
     do{
-        getline(cin, videos[j].title);
-        getline(cin, videos[j].stars);
-        getline(cin, videos[j].producer);
-        getline(cin, videos[j].director);
-        getline(cin, videos[j].company);
-        infile >> videos[j].copies;
+        getline(infile, videos[j].title);
+        getline(infile, videos[j].stars);
+        getline(infile, videos[j].producer);
+        getline(infile, videos[j].director);
+        getline(infile, videos[j].company);
+        getline(infile, temp);
+        videos[j].copies = stoi(temp);
+
         j++;
     } while (infile.good());
     infile.close();
@@ -104,12 +109,8 @@ void addACustomer() {
             cin >> customers[openPos].firstName;
             cout << "Enter Customer Last Name;" << endl;
             cin >> customers[openPos].lastName;
-            customers[openPos].accountNumber=openPos;
-            customers[openPos].rental[0] = "-";
-            customers[openPos].rental[0] = "-";
-            customers[openPos].rental[0] = "-";
-            customers[openPos].rental[3] = "-";
-            customers[openPos].rental[4] = "-";
+            customers[openPos].accountNumber=to_string(openPos);
+            customers[openPos].rental = "-";
             break;
         }
     }
@@ -142,19 +143,103 @@ void showVideoDetails() {
     cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
     cout << "Enter Title To Display Details" << endl;
     getline(cin, query);
-    for(int q; q <= 1000; q++){
+    for(int q=0; q <= 1000; q++){
         if(videos[q].title==query){
             cout << "Title: " << videos[q].title << endl;
             cout << "Stars: " << videos[q].stars << endl;
             cout << "Director: " << videos[q].director << endl;
             cout << "Producer: " << videos[q].producer << endl;
             cout << "Production Company: " << videos[q].company << endl;
-            cout << "Copies: " << endl;
+            cout << "Copies: " << videos[q].copies << endl;
             cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
         }
     }
 }
+void rentAVideo() {
+    string first, last, title;
+    int custNum, vidNum;
+    cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
+    cout << "RENT A VIDEO" << endl;
+    cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
+    cout << "Please insert the customers first name: " << endl;
+    getline(cin, first);
+    cout << "Please insert the customers last name: " << endl;
+    getline(cin, last);
+    cout << "Please insert movie title: " << endl;
+    getline(cin, title);
 
+    for(int i=0; i <= 100; i++){
+        if(customers[i].firstName==first & customers[i].lastName==last){
+            custNum = i;
+            break;
+        }
+    }
+    for(int i=0; i <= 1000; i++){
+        if(videos[i].title==title){
+            vidNum = i;
+            break;
+        }
+    }
+
+    if(videos[vidNum].copies<1){ //this should take me back to the menu
+        cout << "!!! OUT OF COPIES !!!" << endl;
+        return;
+    }
+
+    if(customers[custNum].rental!="-"){ //this should take me back to the menu
+        cout << "!!! CUSTOMER HAS NOT RETURNED PREVIOUS RENTAL !!!" << endl;
+        return;
+    }
+
+    customers[custNum].rental = videos[vidNum].title;
+    videos[vidNum].copies--;
+    cout << videos[vidNum].title << " rented to " << customers[custNum].firstName << " " << customers[custNum].lastName << endl;
+    cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
+
+}
+void returnAVideo() {
+    string first, last, title;
+    int custNum, vidNum;
+    cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
+    cout << "RETURN A VIDEO" << endl;
+    cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
+    cout << "Please insert the customers first name: " << endl;
+    getline(cin, first);
+    cout << "Please insert the customers last name: " << endl;
+    getline(cin, last);
+    cout << "Please insert movie title: " << endl;
+    getline(cin, title);
+
+    for(int i=0; i <= 100; i++){
+        if(customers[i].firstName==first & customers[i].lastName==last){
+            custNum = i;
+            break;
+        }
+    }
+    for(int i=0; i <= 1000; i++){
+        if(videos[i].title==title){
+            vidNum = i;
+            break;
+        }
+    }
+
+    if(customers[custNum].rental!=title){
+        cout << "ERROR: Customer has not rented out this film: " << title <<  endl;
+    }
+
+    customers[custNum].rental="-";
+    videos[vidNum].copies++;
+    cout << "SUCCESS: " << videos[vidNum].title << " has been returned" << endl;
+    cout << ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl;
+}
+void videosByCustomer() {
+        for(int i=0; i < 100; i++){
+            if(customers[i].rental != "-") {
+                cout << customers[i].firstName << " " << customers[i].lastName << " : " << customers[i].rental << endl;
+            }
+
+        }
+}
 void displayMenu(){
     string selection;
     do {
@@ -179,9 +264,11 @@ void displayMenu(){
             addAVideo();
         }
         if(selection=="3"){
+            rentAVideo();
 
         }
         if(selection=="4"){
+            returnAVideo();
 
         }
         if(selection=="5"){
@@ -192,7 +279,32 @@ void displayMenu(){
 
         }
         if(selection=="7"){
+            videosByCustomer();
 
         }
     } while(selection != "0");
+}
+void customerSave() {
+    ofstream outfile;
+    outfile.open("/home/kahlil/CLionProjects/untitled1/customers.txt");
+    for(int i =0; i < 100; i++){
+        outfile << customers[i].firstName << endl;
+        outfile << customers[i].lastName << endl;
+        outfile << customers[i].accountNumber << endl;
+        outfile << customers[i].rental << endl;
+    }
+    outfile.close();
+}
+void videoSave() {
+    ofstream outfile;
+    outfile.open("/home/kahlil/CLionProjects/untitled1/videos.txt");
+    for(int i =0; i < 1000; i++){
+        outfile << videos[i].title << endl;
+        outfile << videos[i].stars << endl;
+        outfile << videos[i].producer << endl;
+        outfile << videos[i].director << endl;
+        outfile << videos[i].company << endl;
+        outfile << videos[i].copies << endl;
+    }
+    outfile.close();
 }
